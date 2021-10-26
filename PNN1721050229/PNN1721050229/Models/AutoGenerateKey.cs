@@ -25,5 +25,10 @@ namespace PNN1721050229.Models
 
             return strKey;
         }
+
+        internal string Generatekey(string personID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
