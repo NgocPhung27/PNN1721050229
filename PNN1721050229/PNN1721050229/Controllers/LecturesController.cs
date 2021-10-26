@@ -13,11 +13,11 @@ namespace PNN1721050229.Controllers
     public class LecturesController : Controller
     {
         private LTQLDbContext db = new LTQLDbContext();
-
+        AutoGenerateKey genKey = new AutoGenerateKey();
         // GET: Lectures
         public ActionResult Index()
         {
-            return View(db.People.ToList());
+            return View(db.Lectures.ToList());
         }
 
         // GET: Lectures/Details/5
@@ -27,7 +27,7 @@ namespace PNN1721050229.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lecture lecture = db.People.Find(id);
+            Lecture lecture = db.Lectures.Find(id);
             if (lecture == null)
             {
                 return HttpNotFound();
@@ -38,6 +38,20 @@ namespace PNN1721050229.Controllers
         // GET: Lectures/Create
         public ActionResult Create()
         {
+            var empID = "";
+            var countEmployee = db.Students.Count();
+            if (countEmployee == 0)
+            {
+                empID = "STD002";
+            }
+            else
+            {
+                //Lấy giá trị PersonID moi nhat
+                var PersonID = db.Students.ToList().OrderByDescending(m => m.PersonID).FirstOrDefault().PersonID;
+                //sinh PersonID tự dộng
+                empID = genKey.Generatekey(PersonID);
+            }
+            ViewBag.PersonID = empID;
             return View();
         }
 
@@ -50,7 +64,7 @@ namespace PNN1721050229.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.People.Add(lecture);
+                db.Lectures.Add(lecture);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -65,7 +79,7 @@ namespace PNN1721050229.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lecture lecture = db.People.Find(id);
+            Lecture lecture = db.Lectures.Find(id);
             if (lecture == null)
             {
                 return HttpNotFound();
@@ -96,7 +110,7 @@ namespace PNN1721050229.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lecture lecture = db.People.Find(id);
+            Lecture lecture = db.Lectures.Find(id);
             if (lecture == null)
             {
                 return HttpNotFound();
@@ -109,8 +123,8 @@ namespace PNN1721050229.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Lecture lecture = db.People.Find(id);
-            db.People.Remove(lecture);
+            Lecture lecture = db.Lectures.Find(id);
+            db.Lectures.Remove(lecture);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

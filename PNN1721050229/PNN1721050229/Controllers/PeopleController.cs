@@ -39,14 +39,16 @@ namespace PNN1721050229.Controllers
         public ActionResult Create()
         {
             var empID = "";
-            var countEmployee = db.People.Count();
+            var countEmployee = db.Students.Count();
             if (countEmployee == 0)
             {
-                empID = "PER002";
+                empID = "STD002";
             }
             else
             {
-                var PersonID = db.People.ToList().OrderByDescending(m => m.PersonID).FirstOrDefault().PersonID;
+                //Lấy giá trị PersonID moi nhat
+                var PersonID = db.Students.ToList().OrderByDescending(m => m.PersonID).FirstOrDefault().PersonID;
+                //sinh PersonID tự dộng
                 empID = genKey.Generatekey(PersonID);
             }
             ViewBag.PersonID = empID;

@@ -13,11 +13,11 @@ namespace PNN1721050229.Controllers
     public class StudentsController : Controller
     {
         private LTQLDbContext db = new LTQLDbContext();
-
+        AutoGenerateKey genKey = new AutoGenerateKey();
         // GET: Students
         public ActionResult Index()
         {
-            return View(db.People.ToList());
+            return View(db.Students.ToList());
         }
 
         // GET: Students/Details/5
@@ -27,7 +27,7 @@ namespace PNN1721050229.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.People.Find(id);
+            Student student = db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -38,6 +38,21 @@ namespace PNN1721050229.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
+
+            var empID = "";
+            var countEmployee = db.Students.Count();
+            if (countEmployee == 0)
+            {
+                empID = "STD002";
+            }
+            else
+            {
+                //Lấy giá trị PersonID moi nhat
+                var PersonID = db.Students.ToList().OrderByDescending(m => m.PersonID).FirstOrDefault().PersonID;
+                //sinh PersonID tự dộng
+                empID = genKey.Generatekey(PersonID);
+            }
+            ViewBag.PersonID = empID;
             return View();
         }
 
@@ -50,7 +65,7 @@ namespace PNN1721050229.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.People.Add(student);
+                db.Students.Add(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -65,7 +80,7 @@ namespace PNN1721050229.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.People.Find(id);
+            Student student = db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -96,7 +111,7 @@ namespace PNN1721050229.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.People.Find(id);
+            Student student = db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -109,8 +124,8 @@ namespace PNN1721050229.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Student student = db.People.Find(id);
-            db.People.Remove(student);
+            Student student = db.Students.Find(id);
+            db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

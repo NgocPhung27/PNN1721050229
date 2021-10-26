@@ -8,22 +8,24 @@ namespace PNN1721050229.Models
 {
     public class AutoGenerateKey
     {
-        public string GenerateKey(string text, string ID)
+        public string GenerateKey(string text, string id)
         {
-            string strKey = "";
-            string numPart = "", strPart = "", strPhanSo = "";
-            numPart = Regex.Match(ID, @"\d+").Value;
-            strPart = Regex.Match(ID, @"\D+").Value;
-            int phanso = (Convert.ToInt32(numPart) + 1);
-            for (int i = 0; i < numPart.Length - phanso.ToString().Length; i++)
+            string strkey = "";
+            string numpPart = "",
+            strPart = "",
+            strPhanSo = "";
+            numpPart = Regex.Match(id, @"\d+").Value;
+            strPart = Regex.Match(id, @"\D+").Value;
+
+            int PhanSo = (Convert.ToInt32(numpPart) + 1);
+            for (int i = 0; i < numpPart.Length - PhanSo.ToString().Length; i++)
             {
                 strPhanSo += "0";
             }
-            strPhanSo += phanso;
-            //tach phan chu
-            strKey = text + strPhanSo;
-
-            return strKey;
+            strPhanSo += PhanSo;
+            //tách phần chữ
+            strkey = strPart + strPhanSo;
+            return strkey;
         }
 
         internal string Generatekey(string personID)
